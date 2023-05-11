@@ -28,13 +28,13 @@ public class Book implements Serializable {
     private  int year;
     @Column(name = "pages", nullable = true)
     private  int pages;
-    @ManyToOne
+    @ManyToOne( fetch = FetchType.EAGER)
     @JoinColumn(name = "theme_id", nullable = true)
     private Theme theme;
-    @ManyToOne
+    @ManyToOne( fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = true)
     private Category category;
-    @ManyToOne
+    @ManyToOne( fetch = FetchType.EAGER)
     @JoinColumn(name = "press_id", nullable = true)
     private Press press;
 
@@ -43,7 +43,7 @@ public class Book implements Serializable {
     @OneToMany(mappedBy = "book")
     private Set<TCard> tCards;
 
-    @ManyToMany
+    @ManyToMany( fetch = FetchType.EAGER)
     @JoinTable(
             name="authors_books",
             joinColumns = @JoinColumn(name="book_id"),
