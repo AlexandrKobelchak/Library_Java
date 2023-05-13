@@ -1,13 +1,12 @@
 package com.example.domain.dao.identity;
 
-import com.example.domain.models.Identity.Role;
-import com.example.domain.models.Identity.User;
+import com.example.domain.models.Identity.AppUser;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-public interface IUserRepository extends CrudRepository<User, Long> {
+public interface IUserRepository extends CrudRepository<AppUser, Long> {
 
-    @Query("SELECT u FROM User u WHERE u.username = :name")
-    User findByName(String name);
+    @Query("SELECT u FROM AppUser u WHERE u.username = :name")
+    AppUser findByName(String name);
 }
 

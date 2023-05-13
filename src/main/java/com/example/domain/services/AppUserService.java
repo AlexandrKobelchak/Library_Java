@@ -2,24 +2,22 @@ package com.example.domain.services;
 
 import com.example.domain.dao.identity.IRoleRepository;
 import com.example.domain.dao.identity.IUserRepository;
-import com.example.domain.models.Identity.Role;
-import com.example.domain.models.Identity.User;
+import com.example.domain.models.Identity.AppRole;
+import com.example.domain.models.Identity.AppUser;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService implements UserDetailsService {
+public class AppUserService implements UserDetailsService {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -30,6 +28,16 @@ public class UserService implements UserDetailsService {
     @Autowired
     IRoleRepository roleRepository;
 
+    AppUser _defaultUser;
+    public AppUserService() {
+
+        AppUser user = new AppUser();
+        user.setUsername("user");
+        user.setPassword("password");
+        user.setRoles(Collections.singleton(new AppRole(1L, "ROLE_USER")));
+        _defaultUser=user;
+    }
+
     //TO DO: for hex crypto password
     //@Autowired
     //BCryptPasswordEncoder passwordEncoder;
@@ -37,25 +45,26 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userRepository.findByName(username);
+        AppUser user = userRepository.findByName(username);
 
         if(user == null){
-            throw new UsernameNotFoundException("User not found");
+            return _defaultUser;
+            //throw new UsernameNotFoundException("User not found");
         }
         return user;
     }
-    public User findUserById(Long id){
+    public AppUser findUserById(Long id){
 
-        Optional<User> user = userRepository.findById(id);
-        return user.orElse(new User());
+        Optional<AppUser> user = userRepository.findById(id);
+        return user.orElse(new AppUser());
     }
 
-    public Iterable<User> allUsers(){
+    public Iterable<AppUser> allUsers(){
 
         return userRepository.findAll();
     }
 
-    public boolean saveUser(User user){
+    public boolean saveUser(AppUser user){
 
         //Username not unique
         if(userRepository.findByName(user.getUsername()) != null){
@@ -63,7 +72,7 @@ public class UserService implements UserDetailsService {
             return false;
         }
 
-        user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+        user.setRoles(Collections.singleton(new AppRole(1L, "ROLE_USER")));
 
         //////////////////////////////////
         //  TO DO: hash crypto password here
@@ -87,9 +96,9 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
-    public List<User> getUsers_GT(Long minId){
+    public List<AppUser> getUsers_GT(Long minId){
 
-        return entityManager.createQuery("SELECT u FROM User u WHERE u.id > :param", User.class)
+        return entityManager.createQuery("SELECT u FROM AppUser u WHERE u.id > :param", AppUser.class)
                 .setParameter("param", minId).getResultList();
     }
 

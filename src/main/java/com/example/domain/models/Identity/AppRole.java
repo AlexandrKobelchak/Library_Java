@@ -10,7 +10,7 @@ import java.util.Set;
 @Getter
 @Table(name = "t_role")
 @NoArgsConstructor
-public class Role implements GrantedAuthority {
+public class AppRole implements GrantedAuthority {
 
     @Id
     @Column(name = "id")
@@ -23,7 +23,7 @@ public class Role implements GrantedAuthority {
     String name;
 
     @ManyToMany(mappedBy = "roles")
-    Set<User> users;
+    Set<AppUser> users;
 
     @Override
     public String getAuthority() {
@@ -31,7 +31,7 @@ public class Role implements GrantedAuthority {
         return getName();
     }
 
-    public Role(Long id, String name) {
+    public AppRole(Long id, String name) {
         this.id = id;
         this.name = name;
     }

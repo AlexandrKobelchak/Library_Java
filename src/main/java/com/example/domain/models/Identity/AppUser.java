@@ -15,7 +15,7 @@ import java.util.Set;
 @Table(name = "t_user", indexes = {
         @Index(name = "username_index", columnList = "username", unique = true)
 })
-public class User implements UserDetails {
+public class AppUser implements UserDetails {
 
     @Id
     @Column(name = "id")
@@ -34,9 +34,9 @@ public class User implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name="users_roles",
-            joinColumns = @JoinColumn(name="role_id"),
-            inverseJoinColumns = @JoinColumn(name="user_id"))
-    Set<Role> roles;
+            joinColumns = @JoinColumn(name="user_id"),
+            inverseJoinColumns = @JoinColumn(name="role_id"))
+    Set<AppRole> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -6,17 +6,26 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
 
 @Controller
 @RequiredArgsConstructor
-public class RegistrationController {
+public class LoginController {
 
     private final AppUserService userService;
 
-    @GetMapping("/registration")
-    public String registration(Model model){
+    @GetMapping("/login")
+    public String getLogin(){
+
+
+        return "/user/login";
+    }
+
+    @PostMapping("/login")
+    public String postLogin(Model model){
 
         model.addAttribute("user", new AppUser());
-        return "/user/registration";
+        return "/home/index";
     }
 }
